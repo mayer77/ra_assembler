@@ -6,8 +6,10 @@
 package assembler.gui;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -18,7 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Ass_GUI extends javax.swing.JFrame
 {
-
+    private String fileString = "";
     /**
      * Creates new form Ass_GUI
      */
@@ -42,12 +44,15 @@ public class Ass_GUI extends javax.swing.JFrame
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextArea1.setColumns(20);
+        jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+        jTextArea1.getAccessibleContext().setAccessibleName("textField");
 
         jButton1.setText("Simfile erzeugen");
 
@@ -62,6 +67,15 @@ public class Ass_GUI extends javax.swing.JFrame
 
         jButton3.setText("Memfile erzeugen");
 
+        jButton4.setText("Code abspeichern");
+        jButton4.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -71,7 +85,9 @@ public class Ass_GUI extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 394, Short.MAX_VALUE)
+                        .addGap(0, 257, Short.MAX_VALUE)
+                        .addComponent(jButton4)
+                        .addGap(18, 18, 18)
                         .addComponent(jButton3)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1))
@@ -90,7 +106,8 @@ public class Ass_GUI extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addContainerGap())
         );
 
@@ -113,30 +130,54 @@ public class Ass_GUI extends javax.swing.JFrame
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             String thisLine;
 
+
             try
             {
                 BufferedReader br = new BufferedReader(new FileReader(selectedFile.getAbsolutePath()));
                 while ((thisLine = br.readLine()) != null)
-                { // while loop begins here
+                {
                     System.out.println(thisLine);
-                } // end while 
-            } 
-            catch(IOException e) 
+                    fileString = fileString + thisLine + "\n";
+                }
+                System.out.println(fileString);
+                jTextArea1.setText(fileString);
+            } catch (IOException e)
             {
-                
+
             }
 
         } // end main
 
-    
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
-/**
- * @param args the command line arguments
- */
-public static void main(String args[])
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
+    {//GEN-HEADEREND:event_jButton4ActionPerformed
+        String FILENAME = "assemblerCode.txt";
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME)))
+        {
+
+
+            bw.write(fileString);
+
+            // no need to close it.
+            //bw.close();
+            System.out.println("Done");
+
+        } catch (IOException e)
+        {
+
+            e.printStackTrace();
+
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[])
     {
-        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -150,32 +191,28 @@ public static void main(String args[])
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                
 
-}
+                }
             }
         } catch (ClassNotFoundException ex)
         {
             java.util.logging.Logger.getLogger(Ass_GUI.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (InstantiationException ex)
+        } catch (InstantiationException ex)
         {
             java.util.logging.Logger.getLogger(Ass_GUI.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (IllegalAccessException ex)
+        } catch (IllegalAccessException ex)
         {
             java.util.logging.Logger.getLogger(Ass_GUI.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-} catch (javax.swing.UnsupportedLookAndFeelException ex)
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(Ass_GUI.class
-.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -193,6 +230,7 @@ public static void main(String args[])
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
