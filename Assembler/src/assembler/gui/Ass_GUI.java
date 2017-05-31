@@ -36,8 +36,7 @@ public class Ass_GUI extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -45,6 +44,7 @@ public class Ass_GUI extends javax.swing.JFrame
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        labelUL = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,10 +57,8 @@ public class Ass_GUI extends javax.swing.JFrame
         jButton1.setText("Simfile erzeugen");
 
         jButton2.setText("File einlesen");
-        jButton2.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
@@ -68,13 +66,13 @@ public class Ass_GUI extends javax.swing.JFrame
         jButton3.setText("Memfile erzeugen");
 
         jButton4.setText("Code abspeichern");
-        jButton4.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
+
+        labelUL.setText("Bereit");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,7 +83,8 @@ public class Ass_GUI extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 257, Short.MAX_VALUE)
+                        .addComponent(labelUL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
                         .addComponent(jButton4)
                         .addGap(18, 18, 18)
                         .addComponent(jButton3)
@@ -107,7 +106,8 @@ public class Ass_GUI extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(jButton4)
+                    .addComponent(labelUL))
                 .addContainerGap())
         );
 
@@ -158,13 +158,18 @@ public class Ass_GUI extends javax.swing.JFrame
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME)))
         {
 
-
-            bw.write(fileString);
-
-            // no need to close it.
-            //bw.close();
-            System.out.println("Done");
-
+            fileString = jTextArea1.getText();
+            fileString = fileString.replaceAll("\n", "\r\n");
+            if(fileString != null)
+            {
+                bw.write(fileString);
+                labelUL.setText("Code abgespeichert!");
+                System.out.println("Done");
+            }
+            else
+            {
+                labelUL.setText("Code konnte nicht abgespeichert werden!");
+            }
         } catch (IOException e)
         {
 
@@ -233,5 +238,6 @@ public class Ass_GUI extends javax.swing.JFrame
     private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel labelUL;
     // End of variables declaration//GEN-END:variables
 }
