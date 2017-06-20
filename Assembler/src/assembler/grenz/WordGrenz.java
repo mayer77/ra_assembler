@@ -9,6 +9,16 @@ import java.util.BitSet;
 public class WordGrenz {
 
     private BitSet opCode, optionA, optionB, optionC, address, ma;
+    
+    public WordGrenz(BitSet opCode, BitSet optionA, BitSet optionB, BitSet optionC, BitSet address, BitSet ma)
+    {
+        this.opCode = opCode;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.address = address;
+        this.ma = ma;
+    }
 
     public BitSet getOpCode() {
         return opCode;

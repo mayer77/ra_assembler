@@ -6,42 +6,59 @@ import java.util.ArrayList;
  *
  * @author mmaye
  */
-public class CodeGrenz {
+public class CodeGrenz
+{
 
     private String ctxt;
     private ArrayList<WordGrenz> cc;
     private ArrayList<VarGrenz> varlist;
     private Integer error;
 
-    public String getCtxt() {
+    public CodeGrenz(String ctxt, ArrayList<WordGrenz> cc, ArrayList<VarGrenz> varlist, Integer error)
+    {
+        this.ctxt = ctxt;
+        this.cc = cc;
+        this.varlist = varlist;
+        this.error = error;
+    }
+
+    public String getCtxt()
+    {
         return ctxt;
     }
 
-    public void setCtxt(String ctxt) {
+    public void setCtxt(String ctxt)
+    {
         this.ctxt = ctxt;
     }
 
-    public ArrayList<WordGrenz> getCc() {
+    public ArrayList<WordGrenz> getCc()
+    {
         return cc;
     }
 
-    public void setCc(ArrayList<WordGrenz> cc) {
+    public void setCc(ArrayList<WordGrenz> cc)
+    {
         this.cc = cc;
     }
 
-    public ArrayList<VarGrenz> getVarlist() {
+    public ArrayList<VarGrenz> getVarlist()
+    {
         return varlist;
     }
 
-    public void setVarlist(ArrayList<VarGrenz> varlist) {
+    public void setVarlist(ArrayList<VarGrenz> varlist)
+    {
         this.varlist = varlist;
     }
 
-    public Integer getError() {
+    public Integer getError()
+    {
         return error;
     }
 
-    public void setError(Integer error) {
+    public void setError(Integer error)
+    {
         this.error = error;
     }
 

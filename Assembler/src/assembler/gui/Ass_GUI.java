@@ -141,7 +141,7 @@ public class Ass_GUI extends javax.swing.JFrame
         {
             File selectedFile = fileChooser.getSelectedFile();
 
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            //System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             String thisLine;
 
             try
@@ -206,7 +206,6 @@ public class Ass_GUI extends javax.swing.JFrame
             dtm.addRow(row);
         }
         
-        System.out.println(dtm.getValueAt(1, 1));
 
     }//GEN-LAST:event_gen_Mem_btnActionPerformed
 

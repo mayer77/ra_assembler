@@ -11,6 +11,12 @@ public class VarGrenz {
     private BitSet ma;
     private String label;
 
+    public VarGrenz(BitSet ma, String label)
+    {
+        this.ma = ma;
+        this.label = label;
+    }
+
     public BitSet getMa() {
         return ma;
     }
