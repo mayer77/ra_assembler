@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -20,7 +21,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Ass_GUI extends javax.swing.JFrame
 {
+
     private String fileString = "";
+
     /**
      * Creates new form Ass_GUI
      */
@@ -36,15 +39,16 @@ public class Ass_GUI extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        labelUL = new javax.swing.JLabel();
+        gen_Sim_btn = new javax.swing.JButton();
+        read_File_btn = new javax.swing.JButton();
+        gen_Mem_btn = new javax.swing.JButton();
+        save_Code_btn = new javax.swing.JButton();
+        message_lbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,25 +58,36 @@ public class Ass_GUI extends javax.swing.JFrame
         jScrollPane1.setViewportView(jTextArea1);
         jTextArea1.getAccessibleContext().setAccessibleName("textField");
 
-        jButton1.setText("Simfile erzeugen");
+        gen_Sim_btn.setText("Simfile erzeugen");
 
-        jButton2.setText("File einlesen");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        read_File_btn.setText("File einlesen");
+        read_File_btn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                read_File_btnActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Memfile erzeugen");
-
-        jButton4.setText("Code abspeichern");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+        gen_Mem_btn.setText("Memfile erzeugen");
+        gen_Mem_btn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                gen_Mem_btnActionPerformed(evt);
             }
         });
 
-        labelUL.setText("Bereit");
+        save_Code_btn.setText("Code abspeichern");
+        save_Code_btn.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                save_Code_btnActionPerformed(evt);
+            }
+        });
+
+        message_lbl.setText("Bereit");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,15 +98,15 @@ public class Ass_GUI extends javax.swing.JFrame
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(labelUL)
+                        .addComponent(message_lbl)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
-                        .addComponent(jButton4)
+                        .addComponent(save_Code_btn)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)
+                        .addComponent(gen_Mem_btn)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1))
+                        .addComponent(gen_Sim_btn))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(read_File_btn)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -99,23 +114,23 @@ public class Ass_GUI extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jButton2)
+                .addComponent(read_File_btn)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(labelUL))
+                    .addComponent(gen_Sim_btn)
+                    .addComponent(gen_Mem_btn)
+                    .addComponent(save_Code_btn)
+                    .addComponent(message_lbl))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
-    {//GEN-HEADEREND:event_jButton2ActionPerformed
+    private void read_File_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_read_File_btnActionPerformed
+    {//GEN-HEADEREND:event_read_File_btnActionPerformed
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
@@ -124,12 +139,10 @@ public class Ass_GUI extends javax.swing.JFrame
 
         if (result == JFileChooser.APPROVE_OPTION)
         {
-
             File selectedFile = fileChooser.getSelectedFile();
 
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             String thisLine;
-
 
             try
             {
@@ -145,38 +158,57 @@ public class Ass_GUI extends javax.swing.JFrame
             {
 
             }
+        }
+    }//GEN-LAST:event_read_File_btnActionPerformed
 
-        } // end main
-
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
-    {//GEN-HEADEREND:event_jButton4ActionPerformed
+    private void save_Code_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_save_Code_btnActionPerformed
+    {//GEN-HEADEREND:event_save_Code_btnActionPerformed
         String FILENAME = "assemblerCode.txt";
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME)))
         {
-
             fileString = jTextArea1.getText();
             fileString = fileString.replaceAll("\n", "\r\n");
-            if(fileString != null)
+            if (fileString != null)
             {
                 bw.write(fileString);
-                labelUL.setText("Code abgespeichert!");
+                message_lbl.setText("Code abgespeichert!");
                 System.out.println("Done");
-            }
-            else
+            } else
             {
-                labelUL.setText("Code konnte nicht abgespeichert werden!");
+                message_lbl.setText("Code konnte nicht abgespeichert werden!");
             }
         } catch (IOException e)
         {
-
             e.printStackTrace();
-
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_save_Code_btnActionPerformed
+
+    private void gen_Mem_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gen_Mem_btnActionPerformed
+    {//GEN-HEADEREND:event_gen_Mem_btnActionPerformed
+        fileString = jTextArea1.getText();
+        fileString = fileString.replaceAll("\n", "\r\n");
+        
+        String[][] table = new String[4][];
+        String[] column;
+        String[] row;
+        column = fileString.split("\r\n");
+        DefaultTableModel dtm = new DefaultTableModel();
+        dtm.addColumn("0");
+        dtm.addColumn("1");
+        dtm.addColumn("2");
+        dtm.addColumn("3");
+
+        for(int i = 0; i < column.length; i++)
+        {
+            
+            row = column[i].split(" ");
+            dtm.addRow(row);
+        }
+        
+        System.out.println(dtm.getValueAt(1, 1));
+
+    }//GEN-LAST:event_gen_Mem_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -232,12 +264,12 @@ public class Ass_GUI extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton gen_Mem_btn;
+    private javax.swing.JButton gen_Sim_btn;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JLabel labelUL;
+    private javax.swing.JLabel message_lbl;
+    private javax.swing.JButton read_File_btn;
+    private javax.swing.JButton save_Code_btn;
     // End of variables declaration//GEN-END:variables
 }
