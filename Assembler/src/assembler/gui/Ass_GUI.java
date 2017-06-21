@@ -5,12 +5,12 @@
  */
 package assembler.gui;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import assembler.grenz.CodeGrenz;
+import assembler.io.ICRUD_IO;
+import assembler.io.ICRUD_IOImpl;
+import assembler.logic.IConverter;
+import assembler.logic.IConverterImpl;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -19,16 +19,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Phillip Braun
  */
-public class Ass_GUI extends javax.swing.JFrame
-{
+public class Ass_GUI extends javax.swing.JFrame {
+
+    //Verwendete Klassen
+    static ICRUD_IO io;
+    static IConverter converter;
+
+    //Gobale Variablen
+    private CodeGrenz codeGrenz;
 
     private String fileString = "";
 
     /**
      * Creates new form Ass_GUI
      */
-    public Ass_GUI()
-    {
+    public Ass_GUI() {
         initComponents();
     }
 
@@ -137,50 +142,43 @@ public class Ass_GUI extends javax.swing.JFrame
         fileChooser.setAcceptAllFileFilterUsed(false);
         int result = fileChooser.showOpenDialog(this);
 
-        if (result == JFileChooser.APPROVE_OPTION)
-        {
-            File selectedFile = fileChooser.getSelectedFile();
-
-            //System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-            String thisLine;
-
-            try
-            {
-                BufferedReader br = new BufferedReader(new FileReader(selectedFile.getAbsolutePath()));
-                while ((thisLine = br.readLine()) != null)
-                {
-                    System.out.println(thisLine);
-                    fileString = fileString + thisLine + "\n";
+        if (result == JFileChooser.APPROVE_OPTION) {
+            System.out.println("approved");
+            codeGrenz = io.loadCode(fileChooser.getSelectedFile());
+            if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError()!=null) {
+                message_lbl.setText("Code konnte nicht eingelsen werden! Error: ");
+            } else {
+                jTextArea1.setText("");
+                for (String line : codeGrenz.getCtxt()) {
+                    jTextArea1.append(line);
+                    jTextArea1.append("\n");
                 }
-                System.out.println(fileString);
-                jTextArea1.setText(fileString);
-            } catch (IOException e)
-            {
-
             }
         }
     }//GEN-LAST:event_read_File_btnActionPerformed
 
     private void save_Code_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_save_Code_btnActionPerformed
     {//GEN-HEADEREND:event_save_Code_btnActionPerformed
-        String FILENAME = "assemblerCode.txt";
 
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME)))
-        {
-            fileString = jTextArea1.getText();
-            fileString = fileString.replaceAll("\n", "\r\n");
-            if (fileString != null)
-            {
-                bw.write(fileString);
-                message_lbl.setText("Code abgespeichert!");
-                System.out.println("Done");
-            } else
-            {
-                message_lbl.setText("Code konnte nicht abgespeichert werden!");
+        if (codeGrenz == null) {
+            message_lbl.setText("Code konnte nicht abgespeichert werden! Kein Code vorhanden.");
+        } else {
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+            fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+            int result = fileChooser.showSaveDialog(this);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+
+                int errorNr = io.saveCode(codeGrenz, fileChooser.getSelectedFile());
+                if (errorNr == 0) {
+                    message_lbl.setText("Code abgespeichert!");
+                } else {
+                    message_lbl.setText("Code konnte nicht abgespeichert werden! Error: " + errorNr);
+                }
             }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
         }
     }//GEN-LAST:event_save_Code_btnActionPerformed
 
@@ -188,7 +186,7 @@ public class Ass_GUI extends javax.swing.JFrame
     {//GEN-HEADEREND:event_gen_Mem_btnActionPerformed
         fileString = jTextArea1.getText();
         fileString = fileString.replaceAll("\n", "\r\n");
-        
+
         String[][] table = new String[4][];
         String[] column;
         String[] row;
@@ -199,64 +197,59 @@ public class Ass_GUI extends javax.swing.JFrame
         dtm.addColumn("2");
         dtm.addColumn("3");
 
-        for(int i = 0; i < column.length; i++)
-        {
-            
+        for (int i = 0; i < column.length; i++) {
+
             row = column[i].split(" ");
             dtm.addRow(row);
         }
-        
+
 
     }//GEN-LAST:event_gen_Mem_btnActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
+
+        //Klassen initialisieren
+        io = new ICRUD_IOImpl();
+        converter = new IConverterImpl();
+
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
                 }
             }
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (InstantiationException ex)
-        {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (IllegalAccessException ex)
-        {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+
                 new Ass_GUI().setVisible(true);
             }
         });

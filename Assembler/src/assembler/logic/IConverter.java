@@ -7,9 +7,6 @@
 package assembler.logic;
 
 import assembler.grenz.CodeGrenz;
-import assembler.grenz.VarGrenz;
-import assembler.grenz.WordGrenz;
-import java.util.ArrayList;
 
 /**
  *
@@ -18,6 +15,6 @@ import java.util.ArrayList;
 public interface IConverter
 {
 
-    public CodeGrenz convert(String row[]); //String[] besser anstatt CodeGrenz?
+    public CodeGrenz convert(CodeGrenz codeGrenz); //ArrayList<String> besser anstatt String[]?
 
 }

@@ -7,7 +7,8 @@
 package assembler.io;
 
 import assembler.grenz.CodeGrenz;
-import java.nio.file.Path;
+import java.io.File;
+
 
 /**
  *
@@ -15,9 +16,9 @@ import java.nio.file.Path;
  */
 public interface ICRUD_IO {
 
-    public int saveCode(CodeGrenz cg, Path cpath);
+    public int saveCode(CodeGrenz cg, File cpath);
 
-    public CodeGrenz loadCode(Path cpath);
+    public CodeGrenz loadCode(File cpath);
 
-    public int exportCode(CodeGrenz cg, Path epath);
+    public int exportCode(CodeGrenz cg, File epath);
 }

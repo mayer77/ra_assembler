@@ -1,17 +1,17 @@
 package assembler.grenz;
 
-import java.util.BitSet;
-
 /**
  *
  * @author mmaye
  */
 public class WordGrenz {
 
-    private BitSet opCode, optionA, optionB, optionC, address, ma;
-    
-    public WordGrenz(BitSet opCode, BitSet optionA, BitSet optionB, BitSet optionC, BitSet address, BitSet ma)
-    {
+    private String opCode, optionA, optionB, optionC, address, ma;
+
+    public WordGrenz() {
+    }
+
+    public WordGrenz(String opCode, String optionA, String optionB, String optionC, String address, String ma) {
         this.opCode = opCode;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -20,53 +20,52 @@ public class WordGrenz {
         this.ma = ma;
     }
 
-    public BitSet getOpCode() {
+    public String getOpCode() {
         return opCode;
     }
 
-    public void setOpCode(BitSet opCode) {
+    public void setOpCode(String opCode) {
         this.opCode = opCode;
     }
 
-    public BitSet getOptionA() {
+    public String getOptionA() {
         return optionA;
     }
 
-    public void setOptionA(BitSet optionA) {
+    public void setOptionA(String optionA) {
         this.optionA = optionA;
     }
 
-    public BitSet getOptionB() {
+    public String getOptionB() {
         return optionB;
     }
 
-    public void setOptionB(BitSet optionB) {
+    public void setOptionB(String optionB) {
         this.optionB = optionB;
     }
 
-    public BitSet getOptionC() {
+    public String getOptionC() {
         return optionC;
     }
 
-    public void setOptionC(BitSet optionC) {
+    public void setOptionC(String optionC) {
         this.optionC = optionC;
     }
 
-    public BitSet getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(BitSet address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    public BitSet getMa() {
+    public String getMa() {
         return ma;
     }
 
-    public void setMa(BitSet ma) {
+    public void setMa(String ma) {
         this.ma = ma;
     }
-    
-    
+
 }
