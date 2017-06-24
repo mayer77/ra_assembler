@@ -9,20 +9,27 @@ import java.util.ArrayList;
  *
  * @author mmaye
  */
-public class IConverterImpl implements IConverter {
+public class IConverterImpl implements IConverter
+{
 
     @Override
-    public CodeGrenz convert(CodeGrenz codeGrenz) {
+    public CodeGrenz convert(CodeGrenz codeGrenz)
+    {
         int error = -1;
         String[] tmpSatz = new String[4];
         ArrayList<WordGrenz> wordList = new ArrayList<>();
         ArrayList<VarGrenz> varList = new ArrayList<>();
-        for (String tmpRow : codeGrenz.getCtxt()) {
+        for (String tmpRow : codeGrenz.getCtxt())
+        {
             tmpSatz = tmpRow.split(" ");
         }
-        for (String tmpWord : tmpSatz) {
+        int line = 0;
+        for (String tmpWord : tmpSatz)
+        {
+            
             VarGrenz variable = search_Var(tmpWord);
-            if (variable != null) {
+            if (variable != null)
+            {
                 varList.add(variable);
             }
             WordGrenz word = searchWord(tmpWord);
@@ -30,7 +37,11 @@ public class IConverterImpl implements IConverter {
             {
                 wordList.add(word);
             }
-
+            else
+            {
+                codeGrenz.setError(line);
+            }
+            line++;
         }
         codeGrenz.setCc(wordList);
         codeGrenz.setError(error);
@@ -38,9 +49,11 @@ public class IConverterImpl implements IConverter {
         return codeGrenz;
     }
 
-    private VarGrenz search_Var(String tmpWord) {
+    private VarGrenz search_Var(String tmpWord)
+    {
         VarGrenz variable = null;
-        if (tmpWord.contains("%")) {
+        if (tmpWord.contains("%"))
+        {
             variable.setLabel(tmpWord);
             String bs = "";
 
@@ -49,10 +62,12 @@ public class IConverterImpl implements IConverter {
         return variable;
     }
 
-    private WordGrenz searchWord(String tmpWord) {
+    private WordGrenz searchWord(String tmpWord)
+    {
         WordGrenz word = new WordGrenz();
-        String bs;
-        switch (tmpWord) {
+        String bs = "";
+        switch (tmpWord)
+        {
             case "st":
                 bs = "00001";
                 break;
@@ -60,84 +75,85 @@ public class IConverterImpl implements IConverter {
                 bs = "00010";
                 break;
             case "sti":
-                bs ="";
+                bs = "00011";
                 break;
             case "ldi":
-                bs ="";
+                bs = "00100";
                 break;
             case "lc":
-                bs ="";
+                bs = "00101";
                 break;
             case "add":
-                bs ="";
+                bs = "00110";
                 break;
             case "sub":
-                bs ="";
+                bs = "00111";
                 break;
             case "mul":
-                bs ="";
+                bs = "01000";
                 break;
             case "div":
-                bs = "00011";
+                bs = "01001";
                 break;
             case "and":
-                bs = "00011";
+                bs = "01010";
                 break;
             case "or":
-                bs = "00011";
+                bs = "01011";
                 break;
             case "xor":
-                bs = "00011";
+                bs = "01100";
                 break;
             case "sll":
-                bs = "00011";
+                bs = "11000";
                 break;
             case "srl":
-                bs = "00011";
+                bs = "11001";
                 break;
             case "sla":
-                bs = "00011";
+                bs = "11010";
                 break;
             case "sra":
-                bs = "00011";
+                bs = "11011";
                 break;
             case "not":
-                bs = "00011";
+                bs = "01101";
                 break;
             case "inc":
-                bs = "00011";
+                bs = "01110";
                 break;
             case "dec":
-                bs = "00011";
+                bs = "01111";
                 break;
             case "jz":
-                bs = "00011";
+                bs = "10000";
                 break;
             case "jne":
-                bs = "00011";
+                bs = "10001";
                 break;
             case "jmp":
-                bs = "00011";
+                bs = "10010";
                 break;
             case "call":
-                bs = "00011";
+                bs = "10011";
                 break;
             case "ret":
-                bs ="";
+                bs = "10100";
                 break;
             case "push":
-                bs ="";
+                bs = "10101";
                 break;
             case "pop":
-                bs ="";
+                bs = "10110";
                 break;
             case "nop":
-                bs ="";
+                bs = "10111";
                 break;
-
+            default:
+                word = null;
+                break;
         }
-
+        word.setOpCode(bs);
         return word;
     }
-
 }
