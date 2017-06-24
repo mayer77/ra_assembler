@@ -1,6 +1,7 @@
 package assembler.grenz;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -11,6 +12,7 @@ public class CodeGrenz {
     private ArrayList<String> ctxt;
     private ArrayList<WordGrenz> cc;
     private ArrayList<VarGrenz> varlist;
+    private HashMap<String, ArrayList<WordGrenz>> labelList;
     private Integer error;
 
     public CodeGrenz(ArrayList<String> ctxt, ArrayList<WordGrenz> cc, ArrayList<VarGrenz> varlist, Integer error) {
@@ -21,7 +23,7 @@ public class CodeGrenz {
     }
 
     public CodeGrenz() {
-        
+
     }
 
     public ArrayList<String> getCtxt() {
@@ -54,6 +56,14 @@ public class CodeGrenz {
 
     public void setError(Integer error) {
         this.error = error;
+    }
+
+    public HashMap<String, ArrayList<WordGrenz>> getLabelList() {
+        return labelList;
+    }
+
+    public void setLabelList(HashMap<String, ArrayList<WordGrenz>> labelList) {
+        this.labelList = labelList;
     }
 
 }

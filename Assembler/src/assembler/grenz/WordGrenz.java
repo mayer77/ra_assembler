@@ -6,17 +6,17 @@ package assembler.grenz;
  */
 public class WordGrenz {
 
-    private String opCode, optionA, optionB, optionC, address, ma;
+    private String opCode, optionA, optionB, optionC, label, ma;
 
     public WordGrenz() {
     }
 
-    public WordGrenz(String opCode, String optionA, String optionB, String optionC, String address, String ma) {
+    public WordGrenz(String opCode, String optionA, String optionB, String optionC, String label, String ma) {
         this.opCode = opCode;
         this.optionA = optionA;
         this.optionB = optionB;
         this.optionC = optionC;
-        this.address = address;
+        this.label = label;
         this.ma = ma;
     }
 
@@ -52,12 +52,12 @@ public class WordGrenz {
         this.optionC = optionC;
     }
 
-    public String getAddress() {
-        return address;
+    public String getLabel() {
+        return label;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getMa() {
