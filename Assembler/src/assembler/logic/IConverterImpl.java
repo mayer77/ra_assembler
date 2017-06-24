@@ -12,14 +12,15 @@ import java.util.HashMap;
  */
 public class IConverterImpl implements IConverter {
 
+    private CodeGrenz codeGrenz;
+
     /**
      *
-     * @param codeGrenz
      * @return null If Ctxt is null
      */
     @Override
-    public CodeGrenz convert(CodeGrenz codeGrenz) {
-
+    public CodeGrenz convert(CodeGrenz cg) {
+        codeGrenz = cg;
         codeGrenz.setCc(new ArrayList<>());
         codeGrenz.setError(null);
         codeGrenz.setVarlist(new ArrayList<>());
@@ -39,21 +40,29 @@ public class IConverterImpl implements IConverter {
                 line = line.replaceAll(";[\\S\\s]*", "");
             }
 
-            //Code interpretieren
+            //Programmbereiche werchseln
+            if (status == 0 && line.contains(".data")) {
+                status = 1;
+            } else if (status == 0) {
+                codeGrenz.getCtxt().remove(line);
+            } else if (status == 1 && line.contains(".text")) {
+                status = 2;
+            } else if (status == 2 && line.contains(".end")) {
+                status = 3;
+            } else //Code interpretieren
             //Variablen
             if (status == 1) {
-                Integer varValue = null;
+                Integer varValue = 0;
+                //System.out.println("line: " + line);
                 if (line.contains(":")) {
-                    if (!codeGrenz.getVarlist().isEmpty()) {
-                        codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).countMA();
-                    }
+
                     varSize = 1;
                     String[] tmp = line.split(":");
 
                     String[] codeOnly = tmp[1].split(" ");
-                    codeOnly[0] = "";
+
                     for (String tmp3 : codeOnly) {
-                        if (!tmp3.isEmpty()) {
+                        if (tmp3.matches("\\d+")) {
                             if (tmp[1].contains(".ds")) {
                                 varSize = Integer.parseInt(tmp3);
                             } else if (tmp[1].contains(".dc")) {
@@ -61,30 +70,37 @@ public class IConverterImpl implements IConverter {
                             }
                         }
                     }
-                    codeGrenz.getVarlist().add(new VarGrenz(tmp[0], new ArrayList<>()));
-                    codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).getValues().add(varValue);
+
+                    if (codeGrenz.getVarlist().add(new VarGrenz(tmp[0], new ArrayList<>()))) {
+                        codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).getValues().add(varValue);
+                    }
+                    if (!codeGrenz.getVarlist().isEmpty()) {
+                        codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).countMA();
+                    }
                 } else {
                     varSize++;
-                    String[] tmp = line.split(":");
 
-                    String[] codeOnly = tmp[1].split(" ");
+                    String[] codeOnly = line.split(" ");
                     codeOnly[0] = "";
                     for (String tmp3 : codeOnly) {
-                        if (!tmp3.isEmpty()) {
-                            if (tmp[1].contains(".ds")) {
+                        if (tmp3.matches("\\d+")) {
+                            if (line.contains(".ds")) {
                                 codeGrenz.setError(lineNR);
                                 return codeGrenz;
-                            } else if (tmp[1].contains(".dc")) {
+                            } else if (line.contains(".dc")) {
                                 varValue = Integer.parseInt(tmp3);
+                            }
+
+                            codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).getValues().add(varValue);
+                            if (!codeGrenz.getVarlist().isEmpty()) {
+                                codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).countMA();
                             }
                         }
                     }
-                    codeGrenz.getVarlist().get(codeGrenz.getVarlist().size() - 1).getValues().add(varValue);
+
                 }
 
-            }
-
-            //Code
+            } else //Code
             if (status == 2) {
                 WordGrenz wordGrenz;
 
@@ -99,15 +115,7 @@ public class IConverterImpl implements IConverter {
                         return codeGrenz;
                     }
 
-                    if (!codeGrenz.getLabelList().containsKey(tmp[0])) {
-                        codeGrenz.getLabelList().put(tmp[0], new ArrayList<>());
-                        codeGrenz.getLabelList().get(tmp[0]).add(wordGrenz);
-
-                    } else {
-                        codeGrenz.getLabelList().get(tmp[0]).add(wordGrenz);
-                    }
-
-                    wordGrenz.setLabel(tmp[0]);
+                    codeGrenz.getLabelList().put(tmp[0], wordGrenz.getMa());
 
                 } else {
                     String[] codeOnly = line.split(" ");
@@ -117,24 +125,13 @@ public class IConverterImpl implements IConverter {
                         return codeGrenz;
                     }
                 }
+                codeGrenz.getCc().add(wordGrenz);
             }
 
-            //Programmbereiche werchseln
-            if (status == 2 && line.contains(".end")) {
-                status = 3;
-            }
-
-            if (status == 1 && line.contains(".text")) {
-                status = 2;
-            }
-
-            if (status == 0 && line.contains(".data")) {
-                status = 1;
-            } else if (status == 0) {
-                codeGrenz.getCtxt().remove(line);
-            }
             lineNR++;
         }
+
+        //Labels vervollständigen
         /*
         
          ArrayList<WordGrenz> wordList = new ArrayList<>();
@@ -203,7 +200,7 @@ public class IConverterImpl implements IConverter {
     }
 
     private WordGrenz searchWord(String[] words, ArrayList<VarGrenz> varList) {
-        WordGrenz wordGrenz = new WordGrenz();
+        WordGrenz wordGrenz = new WordGrenz("", "", "", "", "", "");
         String opCode = "";
         int opCodeLevel = 0;
         int opCodeType = 0;
@@ -214,7 +211,7 @@ public class IConverterImpl implements IConverter {
          */
         for (String word : words) {
             if ((!(word == null)) && (!word.isEmpty())) {
-
+                System.out.println("Opcodelvl:" + opCodeLevel + " opcodetype:" + opCodeType + " opcode:" + opCode);
                 if (opCodeLevel == 0) {
 
                     switch (word) {
@@ -327,34 +324,59 @@ public class IConverterImpl implements IConverter {
                             opCodeType = 1;
                             break;
                         default:
+                            System.out.println("Error: opCodeLevel 0 default opCodeLevel " + opCodeLevel + "opCodeType " + opCodeType + " word: " + word);
                             return null;
                     }
                     opCodeLevel++;
                     wordGrenz.setOpCode(opCode);
-                }
-
-                if (opCodeLevel == 1) {
+                } else if (opCodeLevel == 1) {
                     switch (opCodeType) {
                         case 1:
                             break;
                         case 6:
-                            break;
-                        default:
-                            tmpStrings = word.split("r");
-                            wordGrenz.setOptionA(int2String(Integer.parseInt(tmpStrings[1]), 5));
-                            break;
-                    }
-                }
+                            wordGrenz.setOptionA("00000");
+                            if (!codeGrenz.getLabelList().containsKey(word)) {
+                                codeGrenz.getLabelList().put(word, -1);
 
-                if (opCodeLevel == 2) {
-                    switch (opCodeType) {
+                            }
+                            //System.out.println("codeLevel2 case 6 word:"+word);
+                            wordGrenz.setLabel(word);
+                            break;
+                        case 2:
+                            tmpStrings = word.split("r");
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionA(int2String(Integer.parseInt(tmpStrings[0]), 5));
+                            break;
                         case 3:
                             tmpStrings = word.split("r");
-                            wordGrenz.setOptionB(int2String(Integer.parseInt(tmpStrings[1]), 5));
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionA(int2String(Integer.parseInt(tmpStrings[0]), 5));
                             break;
                         case 4:
                             tmpStrings = word.split("r");
-                            wordGrenz.setOptionB(int2String(Integer.parseInt(tmpStrings[1]), 5));
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionA(int2String(Integer.parseInt(tmpStrings[0]), 5));
+                            break;
+                        case 5:
+                            tmpStrings = word.split("r");
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionA(int2String(Integer.parseInt(tmpStrings[0]), 5));
+                            break;
+                        default:
+                            System.out.println("Error: opCodeLevel 1 default opCodeLevel " + opCodeLevel + "opCodeType " + opCodeType);
+                    }
+                    opCodeLevel++;
+                } else if (opCodeLevel == 2) {
+                    switch (opCodeType) {
+                        case 3:
+                            tmpStrings = word.split("r");
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionB(int2String(Integer.parseInt(tmpStrings[0]), 5));
+                            break;
+                        case 4:
+                            tmpStrings = word.split("r");
+                            tmpStrings = tmpStrings[1].split(",");
+                            wordGrenz.setOptionB(int2String(Integer.parseInt(tmpStrings[0]), 5));
                             break;
                         case 5:
                             if (Character.isDigit(word.charAt(0))) {
@@ -377,11 +399,22 @@ public class IConverterImpl implements IConverter {
                             }
                             break;
                         case 6:
-                            
+
                             break;
+                        default:
+                            System.out.println("Error: opCodeLevel 2 default opCodeLevel " + opCodeLevel + "opCodeType " + opCodeType);
 
                     }
-
+                    opCodeLevel++;
+                } else if (opCodeLevel == 3) {
+                    switch (opCodeType) {
+                        case 4:
+                            tmpStrings = word.split("r");
+                            wordGrenz.setOptionC(int2String(Integer.parseInt(tmpStrings[1]), 5));
+                            break;
+                        default:
+                            System.out.println("Error: opCodeLevel 3 default opCodeLevel " + opCodeLevel + "opCodeType " + opCodeType);
+                    }
                 }
 
             }
@@ -394,7 +427,8 @@ public class IConverterImpl implements IConverter {
         String result;
         result = Integer.toBinaryString(i);
         if (result.length() < size) {
-            for (int n = 0; n < size - result.length(); n++) {
+            int l=result.length();
+            for (int n = 0; n < size - l; n++) {
                 result = "0".concat(result);
             }
         }

@@ -6,7 +6,9 @@ package assembler.grenz;
  */
 public class WordGrenz {
 
-    private String opCode, optionA, optionB, optionC, label, ma;
+    private static int nextMA = 0;
+    private String opCode, optionA, optionB, optionC, label;
+    private int ma;
 
     public WordGrenz() {
     }
@@ -17,7 +19,8 @@ public class WordGrenz {
         this.optionB = optionB;
         this.optionC = optionC;
         this.label = label;
-        this.ma = ma;
+        this.ma = nextMA;
+        nextMA++;
     }
 
     public String getOpCode() {
@@ -60,12 +63,16 @@ public class WordGrenz {
         this.label = label;
     }
 
-    public String getMa() {
+    public static int getNextMA() {
+        return nextMA;
+    }
+
+    public int getMa() {
         return ma;
     }
 
-    public void setMa(String ma) {
-        this.ma = ma;
+    public static void resetMA() {
+        nextMA = 0;
     }
 
 }

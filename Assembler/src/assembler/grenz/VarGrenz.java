@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class VarGrenz {
 
-    private static int nextMA = 1;
+    private static int nextMA = 0;
     private int ma;
     private String label;
     private ArrayList<Integer> values;
@@ -44,7 +44,11 @@ public class VarGrenz {
     }
     
     public void countMA(){
-        nextMA+=values.size();
+        nextMA++;
+    }
+    
+    public static void resetMA() {
+        nextMA = 0;
     }
 
 }

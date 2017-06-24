@@ -11,6 +11,7 @@ import assembler.io.ICRUD_IOImpl;
 import assembler.logic.IConverter;
 import assembler.logic.IConverterImpl;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -145,7 +146,7 @@ public class Ass_GUI extends javax.swing.JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             System.out.println("approved");
             codeGrenz = io.loadCode(fileChooser.getSelectedFile());
-            if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError()!=null) {
+            if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError() != null) {
                 message_lbl.setText("Code konnte nicht eingelsen werden! Error: ");
             } else {
                 jTextArea1.setText("");
@@ -185,22 +186,29 @@ public class Ass_GUI extends javax.swing.JFrame {
     private void gen_Mem_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gen_Mem_btnActionPerformed
     {//GEN-HEADEREND:event_gen_Mem_btnActionPerformed
         fileString = jTextArea1.getText();
-        fileString = fileString.replaceAll("\n", "\r\n");
+        String[] sa = fileString.split("\n");
+        codeGrenz.setCtxt(new ArrayList<>());
+        for (String s : sa) {
+            codeGrenz.getCtxt().add(s);
+        }
+        codeGrenz = converter.convert(codeGrenz);
+        if (codeGrenz == null || !(codeGrenz.getError() == null)) {
+            System.out.println("Error in code Grenz");
+        }
+        
+        System.out.println("Grenzobject anzahl der words: "+codeGrenz.getCc().size()+"anzahl der varlist: "+codeGrenz.getVarlist().size()+ " anzahl der labels: "+codeGrenz.getLabelList().size());
+        System.out.println("Labels:"+codeGrenz.getLabelList().toString());
+        
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Mem File", "mem"));
+        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+        int result = fileChooser.showSaveDialog(this);
 
-        String[][] table = new String[4][];
-        String[] column;
-        String[] row;
-        column = fileString.split("\r\n");
-        DefaultTableModel dtm = new DefaultTableModel();
-        dtm.addColumn("0");
-        dtm.addColumn("1");
-        dtm.addColumn("2");
-        dtm.addColumn("3");
+        if (result == JFileChooser.APPROVE_OPTION) {
 
-        for (int i = 0; i < column.length; i++) {
-
-            row = column[i].split(" ");
-            dtm.addRow(row);
+            io.exportCode(codeGrenz, fileChooser.getSelectedFile());
         }
 
 
@@ -251,6 +259,7 @@ public class Ass_GUI extends javax.swing.JFrame {
             public void run() {
 
                 new Ass_GUI().setVisible(true);
+                //System.out.println(Integer.toBinaryString(64));
             }
         });
     }

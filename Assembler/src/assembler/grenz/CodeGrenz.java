@@ -12,7 +12,7 @@ public class CodeGrenz {
     private ArrayList<String> ctxt;
     private ArrayList<WordGrenz> cc;
     private ArrayList<VarGrenz> varlist;
-    private HashMap<String, ArrayList<WordGrenz>> labelList;
+    private HashMap<String, Integer> labelList;
     private Integer error;
 
     public CodeGrenz(ArrayList<String> ctxt, ArrayList<WordGrenz> cc, ArrayList<VarGrenz> varlist, Integer error) {
@@ -20,11 +20,11 @@ public class CodeGrenz {
         this.cc = cc;
         this.varlist = varlist;
         this.error = error;
+        VarGrenz.resetMA();
+        WordGrenz.resetMA();
     }
 
-    public CodeGrenz() {
 
-    }
 
     public ArrayList<String> getCtxt() {
         return ctxt;
@@ -58,12 +58,14 @@ public class CodeGrenz {
         this.error = error;
     }
 
-    public HashMap<String, ArrayList<WordGrenz>> getLabelList() {
+    public HashMap<String, Integer> getLabelList() {
         return labelList;
     }
 
-    public void setLabelList(HashMap<String, ArrayList<WordGrenz>> labelList) {
+    public void setLabelList(HashMap<String, Integer> labelList) {
         this.labelList = labelList;
     }
+
+    
 
 }
