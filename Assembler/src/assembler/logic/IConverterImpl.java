@@ -15,7 +15,49 @@ public class IConverterImpl implements IConverter
     @Override
     public CodeGrenz convert(CodeGrenz codeGrenz)
     {
+        ArrayList<WordGrenz> wordList = new ArrayList<>();
+        ArrayList<String> row;
+        row = codeGrenz.getCtxt();
+        WordGrenz wordGrenz = new WordGrenz();
+        String[] column = new String[5];
+        int line = 0;
+        for(String tmpColumn : row)
+        {
+            column = tmpColumn.split(" ");
+            VarGrenz variable = search_Var(column[0]);
+            if(variable == null)
+            {
+                wordGrenz = searchWord(column[0]);
+                if(wordGrenz == null)
+                {
+                    codeGrenz.setError(line);
+                }
+                else
+                {
+                    wordGrenz.setAddress(Integer.toString(line));
+                }
+            }
+            else
+            {
+                wordGrenz = searchWord(column[1]);
+                if(wordGrenz == null)
+                {
+                    codeGrenz.setError(line);
+                }
+                else
+                {
+                    wordGrenz.setAddress(Integer.toString(line));
+                }
+                
+            }
+            
+            
+        }
+                
+                
+        /*
         int error = -1;
+        int line = 0;
         String[] tmpSatz = new String[4];
         ArrayList<WordGrenz> wordList = new ArrayList<>();
         ArrayList<VarGrenz> varList = new ArrayList<>();
@@ -23,7 +65,7 @@ public class IConverterImpl implements IConverter
         {
             tmpSatz = tmpRow.split(" ");
         }
-        int line = 0;
+        
         for (String tmpWord : tmpSatz)
         {
             
@@ -46,13 +88,14 @@ public class IConverterImpl implements IConverter
         codeGrenz.setCc(wordList);
         codeGrenz.setError(error);
         codeGrenz.setVarlist(varList);
+                 */
         return codeGrenz;
     }
 
     private VarGrenz search_Var(String tmpWord)
     {
         VarGrenz variable = null;
-        if (tmpWord.contains("%"))
+        if (tmpWord.contains(":"))
         {
             variable.setLabel(tmpWord);
             String bs = "";
@@ -155,5 +198,13 @@ public class IConverterImpl implements IConverter
         }
         word.setOpCode(bs);
         return word;
+    }
+
+    private String searchReg()
+    {
+        
+        String retString = new String();
+        
+        return retString;
     }
 }
