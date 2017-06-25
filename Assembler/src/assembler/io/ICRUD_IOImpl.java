@@ -15,8 +15,8 @@ import java.util.logging.Logger;
 
 /**
  *
- *
- * @author mmaye
+ * @author Maximilian Mayer
+ * @author Phillip Braun
  */
 public class ICRUD_IOImpl implements ICRUD_IO {
 
@@ -27,7 +27,7 @@ public class ICRUD_IOImpl implements ICRUD_IO {
             for (String line : codeGrenz.getCtxt()) {
                 bw.append(line);
                 bw.newLine();
-                System.out.println("Line:" + line);
+                //System.out.println("Line:" + line);
             }
             bw.close();
         } catch (java.io.IOException e) {
@@ -48,7 +48,6 @@ public class ICRUD_IOImpl implements ICRUD_IO {
             while ((thisLine = br.readLine()) != null) {
                 if (!thisLine.isEmpty()) {
                     codeGrenz.getCtxt().add(thisLine);
-                    //System.out.println("Line:" + thisLine);
                 }
             }
             br.close();
@@ -86,18 +85,13 @@ public class ICRUD_IOImpl implements ICRUD_IO {
             }
             address+=VarGrenz.getNextMA();
             for (WordGrenz wg : cg.getCc()) {
-                System.out.println("word nr "+wg.getMa()+"label:"+wg.getLabel());
                 if (!wg.getLabel().isEmpty()) {
                     
                     tString = fillLeftZero(Integer.toBinaryString(cg.getLabelList().get(wg.getLabel())+VarGrenz.getNextMA()+1), 22);
-                    System.out.println("found label:"+tString);
                 } else {
                     tString = "";
                 }
-                
-                
-                
-                
+
                 writer.println(Integer.toHexString(address + wg.getMa()) + " : " + fillRightZero( wg.getOpCode() + wg.getOptionA() + wg.getOptionB() + wg.getOptionC() + tString));
                 
             }
@@ -120,7 +114,6 @@ public class ICRUD_IOImpl implements ICRUD_IO {
         for (int i = 0; i < (length - n); i++) {
             s = "0".concat(s);
         }
-      //  System.out.println("fillleft zero:"+s +"s length:"+s.length()+" ziel size:"+length);
         return s;
     }
 
@@ -130,7 +123,6 @@ public class ICRUD_IOImpl implements ICRUD_IO {
         for (int i = 0; i < (32 - n); i++) {
             s = s.concat("0");
         }
-       // System.out.println("fillright zero:"+s +"s length:"+s.length()+" ziel size:"+32);
         return s;
     }
 

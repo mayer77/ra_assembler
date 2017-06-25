@@ -14,11 +14,11 @@ import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Phillip Braun
+ * @author Maximilian Mayer
  */
 public class Ass_GUI extends javax.swing.JFrame {
 
@@ -196,9 +196,6 @@ public class Ass_GUI extends javax.swing.JFrame {
             System.out.println("Error in code Grenz");
         }
         
-        System.out.println("Grenzobject anzahl der words: "+codeGrenz.getCc().size()+"anzahl der varlist: "+codeGrenz.getVarlist().size()+ " anzahl der labels: "+codeGrenz.getLabelList().size());
-        System.out.println("Labels:"+codeGrenz.getLabelList().toString());
-        
         
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -259,7 +256,6 @@ public class Ass_GUI extends javax.swing.JFrame {
             public void run() {
 
                 new Ass_GUI().setVisible(true);
-                //System.out.println(Integer.toBinaryString(64));
             }
         });
     }

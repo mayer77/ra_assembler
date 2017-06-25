@@ -4,16 +4,19 @@ package assembler.grenz;
  *
  * @author mmaye
  */
-public class WordGrenz {
-
+public class WordGrenz
+{
     private static int nextMA = 0;
     private String opCode, optionA, optionB, optionC, label;
     private int ma;
 
-    public WordGrenz() {
+    public WordGrenz()
+    {
+        
     }
 
-    public WordGrenz(String opCode, String optionA, String optionB, String optionC, String label, String ma) {
+    public WordGrenz(String opCode, String optionA, String optionB, String optionC, String label, String ma)
+    {
         this.opCode = opCode;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -23,56 +26,68 @@ public class WordGrenz {
         nextMA++;
     }
 
-    public String getOpCode() {
+    public String getOpCode()
+    {
         return opCode;
     }
 
-    public void setOpCode(String opCode) {
+    public void setOpCode(String opCode)
+    {
         this.opCode = opCode;
     }
 
-    public String getOptionA() {
+    public String getOptionA()
+    {
         return optionA;
     }
 
-    public void setOptionA(String optionA) {
+    public void setOptionA(String optionA)
+    {
         this.optionA = optionA;
     }
 
-    public String getOptionB() {
+    public String getOptionB()
+    {
         return optionB;
     }
 
-    public void setOptionB(String optionB) {
+    public void setOptionB(String optionB)
+    {
         this.optionB = optionB;
     }
 
-    public String getOptionC() {
+    public String getOptionC()
+    {
         return optionC;
     }
 
-    public void setOptionC(String optionC) {
+    public void setOptionC(String optionC)
+    {
         this.optionC = optionC;
     }
 
-    public String getLabel() {
+    public String getLabel()
+    {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(String label)
+    {
         this.label = label;
     }
 
-    public static int getNextMA() {
+    public static int getNextMA()
+    {
         return nextMA;
     }
 
-    public int getMa() {
+    public int getMa()
+    {
         return ma;
     }
 
-    public static void resetMA() {
+    public static void resetMA()
+    {
         nextMA = 0;
     }
-
 }
