@@ -148,7 +148,7 @@ public class Ass_GUI extends javax.swing.JFrame
 
             if (result == JFileChooser.APPROVE_OPTION)
             {
-                
+
                 codeGrenz = io.loadCode(fileChooser.getSelectedFile());
                 if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError() != null)
                 {
@@ -164,7 +164,7 @@ public class Ass_GUI extends javax.swing.JFrame
                 }
                 message_lbl.setText("Code geladen.");
             }
-        } catch (Exception e) 
+        } catch (Exception e)
         {
             message_lbl.setText("Code konnte nicht geladen werden.");
         }
@@ -219,11 +219,14 @@ public class Ass_GUI extends javax.swing.JFrame
                 codeGrenz.getCtxt().add(s);
             }
             codeGrenz = converter.convert(codeGrenz);
-            if (codeGrenz == null || !(codeGrenz.getError() == null))
+            if (codeGrenz == null)
+            {
+                message_lbl.setText("Allgemeiner Fehler beim Konvertieren.");
+            }
+            if (!(codeGrenz.getError() == null))
             {
                 int error = codeGrenz.getError();
                 message_lbl.setText("Error in Zeile: " + error);
-                //System.out.println("Error in code Grenz");
             }
 
             JFileChooser fileChooser = new JFileChooser();
@@ -234,10 +237,12 @@ public class Ass_GUI extends javax.swing.JFrame
 
             if (result == JFileChooser.APPROVE_OPTION)
             {
-                io.exportCode(codeGrenz, fileChooser.getSelectedFile());
+                if (io.exportCode(codeGrenz, fileChooser.getSelectedFile()) == 1)
+                {
+                    message_lbl.setText("Fehler! MIF-File konnte nicht abgespeichert weden.");
+                }
             }
-        } 
-        catch (Exception e)
+        } catch (Exception e)
         {
             message_lbl.setText("Fehler! MIF-File konnte nicht erstellt werden.");
         }
