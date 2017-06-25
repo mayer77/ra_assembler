@@ -20,7 +20,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Phillip Braun
  * @author Maximilian Mayer
  */
-public class Ass_GUI extends javax.swing.JFrame {
+public class Ass_GUI extends javax.swing.JFrame
+{
 
     //Verwendete Klassen
     static ICRUD_IO io;
@@ -28,13 +29,13 @@ public class Ass_GUI extends javax.swing.JFrame {
 
     //Gobale Variablen
     private CodeGrenz codeGrenz;
-
     private String fileString = "";
 
     /**
      * Creates new form Ass_GUI
      */
-    public Ass_GUI() {
+    public Ass_GUI()
+    {
         initComponents();
     }
 
@@ -137,84 +138,116 @@ public class Ass_GUI extends javax.swing.JFrame {
 
     private void read_File_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_read_File_btnActionPerformed
     {//GEN-HEADEREND:event_read_File_btnActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        int result = fileChooser.showOpenDialog(this);
+        try
+        {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            int result = fileChooser.showOpenDialog(this);
 
-        if (result == JFileChooser.APPROVE_OPTION) {
-            System.out.println("approved");
-            codeGrenz = io.loadCode(fileChooser.getSelectedFile());
-            if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError() != null) {
-                message_lbl.setText("Code konnte nicht eingelsen werden! Error: ");
-            } else {
-                jTextArea1.setText("");
-                for (String line : codeGrenz.getCtxt()) {
-                    jTextArea1.append(line);
-                    jTextArea1.append("\n");
+            if (result == JFileChooser.APPROVE_OPTION)
+            {
+                
+                codeGrenz = io.loadCode(fileChooser.getSelectedFile());
+                if (codeGrenz == null || codeGrenz.getCtxt() == null || codeGrenz.getError() != null)
+                {
+                    message_lbl.setText("Code konnte nicht eingelsen werden! Error: ");
+                } else
+                {
+                    jTextArea1.setText("");
+                    for (String line : codeGrenz.getCtxt())
+                    {
+                        jTextArea1.append(line);
+                        jTextArea1.append("\n");
+                    }
                 }
+                message_lbl.setText("Code geladen.");
             }
+        } catch (Exception e) 
+        {
+            message_lbl.setText("Code konnte nicht geladen werden.");
         }
     }//GEN-LAST:event_read_File_btnActionPerformed
 
     private void save_Code_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_save_Code_btnActionPerformed
     {//GEN-HEADEREND:event_save_Code_btnActionPerformed
+        try
+        {
+            if (codeGrenz == null)
+            {
+                message_lbl.setText("Code konnte nicht abgespeichert werden! Kein Code vorhanden.");
+            } else
+            {
 
-        if (codeGrenz == null) {
-            message_lbl.setText("Code konnte nicht abgespeichert werden! Kein Code vorhanden.");
-        } else {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+                fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
+                fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+                int result = fileChooser.showSaveDialog(this);
 
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
-            fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-            int result = fileChooser.showSaveDialog(this);
+                if (result == JFileChooser.APPROVE_OPTION)
+                {
 
-            if (result == JFileChooser.APPROVE_OPTION) {
-
-                int errorNr = io.saveCode(codeGrenz, fileChooser.getSelectedFile());
-                if (errorNr == 0) {
-                    message_lbl.setText("Code abgespeichert!");
-                } else {
-                    message_lbl.setText("Code konnte nicht abgespeichert werden! Error: " + errorNr);
+                    int errorNr = io.saveCode(codeGrenz, fileChooser.getSelectedFile());
+                    if (errorNr == 0)
+                    {
+                        message_lbl.setText("Code abgespeichert!");
+                    } else
+                    {
+                        message_lbl.setText("Code konnte nicht abgespeichert werden! Error: " + errorNr);
+                    }
                 }
             }
+        } catch (Exception e)
+        {
+            message_lbl.setText("Code konnte nicht abgespeichert werden.");
         }
     }//GEN-LAST:event_save_Code_btnActionPerformed
 
     private void gen_Mem_btnActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gen_Mem_btnActionPerformed
     {//GEN-HEADEREND:event_gen_Mem_btnActionPerformed
-        fileString = jTextArea1.getText();
-        String[] sa = fileString.split("\n");
-        codeGrenz.setCtxt(new ArrayList<>());
-        for (String s : sa) {
-            codeGrenz.getCtxt().add(s);
+        try
+        {
+            fileString = jTextArea1.getText();
+            String[] sa = fileString.split("\n");
+
+            setCodeGrenz();
+            codeGrenz.setCtxt(new ArrayList<>());
+            for (String s : sa)
+            {
+                codeGrenz.getCtxt().add(s);
+            }
+            codeGrenz = converter.convert(codeGrenz);
+            if (codeGrenz == null || !(codeGrenz.getError() == null))
+            {
+                int error = codeGrenz.getError();
+                message_lbl.setText("Error in Zeile: " + error);
+                //System.out.println("Error in code Grenz");
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Mem File", "mem"));
+            fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+            int result = fileChooser.showSaveDialog(this);
+
+            if (result == JFileChooser.APPROVE_OPTION)
+            {
+                io.exportCode(codeGrenz, fileChooser.getSelectedFile());
+            }
+        } 
+        catch (Exception e)
+        {
+            message_lbl.setText("Fehler! MIF-File konnte nicht erstellt werden.");
         }
-        codeGrenz = converter.convert(codeGrenz);
-        if (codeGrenz == null || !(codeGrenz.getError() == null)) {
-            System.out.println("Error in code Grenz");
-        }
-        
-        
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Mem File", "mem"));
-        fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-        int result = fileChooser.showSaveDialog(this);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-
-            io.exportCode(codeGrenz, fileChooser.getSelectedFile());
-        }
-
-
     }//GEN-LAST:event_gen_Mem_btnActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
 
         //Klassen initialisieren
@@ -225,39 +258,55 @@ public class Ass_GUI extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
 
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
 
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(Ass_GUI.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new Ass_GUI().setVisible(true);
             }
         });
+    }
+
+    private void setCodeGrenz()
+    {
+        if (codeGrenz == null)
+        {
+            codeGrenz = new CodeGrenz(null, null, null, null);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

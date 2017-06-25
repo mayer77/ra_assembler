@@ -60,7 +60,7 @@ public class ICRUD_IOImpl implements ICRUD_IO {
 
     @Override
     public int exportCode(CodeGrenz cg, File epath) {
-        //der mif Teil
+        //MIF-File 
         int address = 0;
         String tString;
 
