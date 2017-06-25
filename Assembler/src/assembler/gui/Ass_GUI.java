@@ -76,7 +76,7 @@ public class Ass_GUI extends javax.swing.JFrame
             }
         });
 
-        gen_Mem_btn.setText("Memfile erzeugen");
+        gen_Mem_btn.setText("MIF erzeugen");
         gen_Mem_btn.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -106,7 +106,7 @@ public class Ass_GUI extends javax.swing.JFrame
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(message_lbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 229, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 247, Short.MAX_VALUE)
                         .addComponent(save_Code_btn)
                         .addGap(18, 18, 18)
                         .addComponent(gen_Mem_btn)
@@ -231,7 +231,7 @@ public class Ass_GUI extends javax.swing.JFrame
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("MIF File", "mif"));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("MIF (.mif)", "mif"));
             fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
             int result = fileChooser.showSaveDialog(this);
 

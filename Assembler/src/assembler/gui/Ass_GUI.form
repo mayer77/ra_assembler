@@ -29,7 +29,7 @@
                   <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="message_lbl" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="229" max="32767" attributes="0"/>
+                      <EmptySpace pref="247" max="32767" attributes="0"/>
                       <Component id="save_Code_btn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="gen_Mem_btn" min="-2" max="-2" attributes="0"/>
@@ -99,7 +99,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="gen_Mem_btn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Memfile erzeugen"/>
+        <Property name="text" type="java.lang.String" value="MIF erzeugen"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gen_Mem_btnActionPerformed"/>
