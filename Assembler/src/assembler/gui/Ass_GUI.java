@@ -231,7 +231,7 @@ public class Ass_GUI extends javax.swing.JFrame
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Mem File", "mem"));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("MIF File", "mif"));
             fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
             int result = fileChooser.showSaveDialog(this);
 
@@ -242,6 +242,7 @@ public class Ass_GUI extends javax.swing.JFrame
                     message_lbl.setText("Fehler! MIF-File konnte nicht abgespeichert weden.");
                 }
             }
+            message_lbl.setText("Code wurde übersetzt.");
         } catch (Exception e)
         {
             message_lbl.setText("Fehler! MIF-File konnte nicht erstellt werden.");
