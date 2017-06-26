@@ -3,9 +3,12 @@ package assembler.io;
 import assembler.grenz.CodeGrenz;
 import assembler.grenz.VarGrenz;
 import assembler.grenz.WordGrenz;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
@@ -122,7 +125,51 @@ public class ICRUD_IOImpl implements ICRUD_IO
             return 1;
         }
 
+        //SIM -Teil
+        //MIF-File 
+        address = 0;
+        //String tString;
+
+        try
+        {
+
+            DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("test.rsk")));
+            //dos.writeInt(words.size());
+
+            //address++;
+            for (VarGrenz vg : cg.getVarlist())
+            {
+                int i = 0;
+                for (Integer val : vg.getValues())
+                {
+                    dos.writeUTF(Integer.toHexString(address + vg.getMa() + i) + " : " + fillRightZero("00000" + fillLeftZero(Integer.toBinaryString(val), 27)));
+                    i++;
+                }
+            }
+            address += VarGrenz.getNextMA();
+            for (WordGrenz wg : cg.getCc())
+            {
+                if (!wg.getLabel().isEmpty())
+                {
+
+                    tString = fillLeftZero(Integer.toBinaryString(cg.getLabelList().get(wg.getLabel()) + VarGrenz.getNextMA() + 1), 22);
+                } else
+                {
+                    tString = "";
+                }
+
+                dos.writeUTF(Integer.toHexString(address + wg.getMa()) + " : " + fillRightZero(wg.getOpCode() + wg.getOptionA() + wg.getOptionB() + wg.getOptionC() + tString));
+            }
+            dos.close();
+
+        } catch (Exception e)
+        {
+            Logger.getLogger(ICRUD_IOImpl.class.getName()).log(Level.SEVERE, null, e);
+            return 1;
+        }
+
         return 0;
+
     }
 
     private String fillLeftZero(String s, int length)
