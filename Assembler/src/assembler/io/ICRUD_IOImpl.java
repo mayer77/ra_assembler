@@ -79,13 +79,13 @@ public class ICRUD_IOImpl implements ICRUD_IO {
                 
             //dos.writeInt(words.size());
               //  dos.writeBytes("1001000000" + fillLeftZero(Integer.toBinaryString(VarGrenz.getNextMA() + 1), 22));
-                txt.add("1001000000" + fillLeftZero(Integer.toBinaryString(VarGrenz.getNextMA() + 1), 22));
+                txt.add(("1001000000" + fillLeftZero(Integer.toBinaryString(VarGrenz.getNextMA() + 1), 22)));
                 //address++;
                 for (VarGrenz vg : cg.getVarlist()) {
                     int i = 0;
                     for (Integer val : vg.getValues()) {
                         //dos.writeBytes(fillRightZero("00000" + fillLeftZero(Integer.toBinaryString(val), 27)));
-                        txt.add(fillRightZero("00000" + fillLeftZero(Integer.toBinaryString(val), 27)));
+                        txt.add((fillRightZero("00000" + fillLeftZero(Integer.toBinaryString(val), 27))));
                         i++;
                     }
                 }
@@ -99,14 +99,25 @@ public class ICRUD_IOImpl implements ICRUD_IO {
                     }
 
                   //  dos.writeBytes(fillRightZero(wg.getOpCode() + wg.getOptionA() + wg.getOptionB() + wg.getOptionC() + tString));
-                    txt.add(fillRightZero(wg.getOpCode() + wg.getOptionA() + wg.getOptionB() + wg.getOptionC() + tString));
+                    txt.add((fillRightZero(wg.getOpCode() + wg.getOptionA() + wg.getOptionB() + wg.getOptionC() + tString)));
                 }
              //   dos.flush();
                // dos.close();
                 
-                OpenOption[] options = new OpenOption[] { StandardOpenOption.WRITE, StandardOpenOption.CREATE};
+                OpenOption[] options = new OpenOption[] {};
+                byte[] btxt=new byte[txt.size()*4];
+                int j=0;
                 
-                Files.write(epath.toPath(),txt ,options);
+                for(String ints:txt){
+                    btxt[j]=(byte)Integer.parseInt(ints.substring(0, 8),2);
+                    btxt[j+1]=(byte)Integer.parseInt(ints.substring(8, 16),2);
+                    btxt[j+2]=(byte)Integer.parseInt(ints.substring(16, 24),2);
+                    btxt[j+3]=(byte)Integer.parseInt(ints.substring(24, 32),2);
+                    j++;
+                }
+               
+                Files.write(epath.toPath(),btxt,options);
+               
 
             } catch (Exception e) {
                 Logger.getLogger(ICRUD_IOImpl.class.getName()).log(Level.SEVERE, null, e);
