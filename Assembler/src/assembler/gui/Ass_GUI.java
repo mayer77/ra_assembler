@@ -46,8 +46,7 @@ public class Ass_GUI extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -66,30 +65,29 @@ public class Ass_GUI extends javax.swing.JFrame
         jTextArea1.getAccessibleContext().setAccessibleName("textField");
 
         gen_Sim_btn.setText("Simfile erzeugen");
+        gen_Sim_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gen_Sim_btnActionPerformed(evt);
+            }
+        });
 
         read_File_btn.setText("File einlesen");
-        read_File_btn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        read_File_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 read_File_btnActionPerformed(evt);
             }
         });
 
         gen_Mem_btn.setText("MIF erzeugen");
-        gen_Mem_btn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        gen_Mem_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gen_Mem_btnActionPerformed(evt);
             }
         });
 
         save_Code_btn.setText("Code abspeichern");
-        save_Code_btn.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        save_Code_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 save_Code_btnActionPerformed(evt);
             }
         });
@@ -237,7 +235,7 @@ public class Ass_GUI extends javax.swing.JFrame
 
             if (result == JFileChooser.APPROVE_OPTION)
             {
-                if (io.exportCode(codeGrenz, fileChooser.getSelectedFile()) == 1)
+                if (io.exportCode(codeGrenz, fileChooser.getSelectedFile(), false) == 1)
                 {
                     message_lbl.setText("Fehler! MIF-File konnte nicht abgespeichert weden.");
                 }
@@ -248,6 +246,57 @@ public class Ass_GUI extends javax.swing.JFrame
             message_lbl.setText("Fehler! MIF-File konnte nicht erstellt werden.");
         }
     }//GEN-LAST:event_gen_Mem_btnActionPerformed
+
+    private void gen_Sim_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gen_Sim_btnActionPerformed
+         try
+        {
+            fileString = jTextArea1.getText();
+            String[] sa = fileString.split("\n");
+
+            setCodeGrenz();
+            codeGrenz.setCtxt(new ArrayList<>());
+            for (String s : sa)
+            {
+                codeGrenz.getCtxt().add(s);
+            }
+            codeGrenz = converter.convert(codeGrenz);
+            if (codeGrenz == null)
+            {
+                message_lbl.setText("Allgemeiner Fehler beim Konvertieren.");
+            }
+            if (!(codeGrenz.getError() == null))
+            {
+                int error = codeGrenz.getError();
+                message_lbl.setText("Error in Zeile: " + error);
+            }
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            fileChooser.setFileFilter(new FileNameExtensionFilter("RSK (.rsk)", "rsk"));
+            fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
+            int result = fileChooser.showSaveDialog(this);
+
+            if (result == JFileChooser.APPROVE_OPTION)
+            {
+                if (io.exportCode(codeGrenz, fileChooser.getSelectedFile(), true) == 1)
+                {
+                    message_lbl.setText("Fehler! RSK-File konnte nicht abgespeichert weden.");
+                }
+            }
+            message_lbl.setText("Code wurde übersetzt.");
+        } catch (Exception e)
+        {
+            message_lbl.setText("Fehler! RSK-File konnte nicht erstellt werden.");
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_gen_Sim_btnActionPerformed
 
     /**
      * @param args the command line arguments

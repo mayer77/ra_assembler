@@ -23,9 +23,12 @@ public class IConverterImpl implements IConverter
     @Override
     public CodeGrenz convert(CodeGrenz cg)
     {
+        
         try
         {
             codeGrenz = cg;
+            VarGrenz.resetMA();
+            WordGrenz.resetMA();
             codeGrenz.setCc(new ArrayList<>());
             codeGrenz.setError(null);
             codeGrenz.setVarlist(new ArrayList<>());

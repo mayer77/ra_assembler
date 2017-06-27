@@ -20,5 +20,5 @@ public interface ICRUD_IO {
 
     public CodeGrenz loadCode(File cpath);
 
-    public int exportCode(CodeGrenz cg, File epath);
+    public int exportCode(CodeGrenz cg, File epath, boolean isSim);
 }
